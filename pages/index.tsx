@@ -7,21 +7,24 @@ import ChartSection from '../components/ChartSection'
 
 const Home: NextPage = () => {
   return (
-    <div> 
+    <> 
       <Head>
         <title>Inflation Charts</title>
       </Head>
 
-      {/* Header */}
-      <Header />
+      <div className='flex h-screen'>
+        {/* Header */}
+        <Header />
 
-      {/* Chart */}
-      <ChartSection />
+        {/* Chart */}
+        <ChartSection />
 
-      {/* Footer */}
-      <Footer />
+        {/* Footer */}
+        <Footer />
 
-    </div>
+      </div>
+
+    </>
   )
 }
 

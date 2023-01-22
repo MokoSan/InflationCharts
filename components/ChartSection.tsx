@@ -10,7 +10,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
-import Select from 'react-select'
+import Select, { MultiValue } from 'react-select'
 import { useState, useEffect } from 'react';
 
 ChartJS.register(
@@ -22,6 +22,23 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+interface IOptionSelection {
+  label : string;
+  value : number[];
+}
+
+interface ISeriesData {
+  label : string;
+  data : number[];
+  borderColor : string;
+  backgroundColor : string;
+}
+
+interface IChartData {
+  labels : string[];
+  datasets: ISeriesData[] | undefined;
+}
 
 const optionList = [
   { value: [1,2,3], label: "Red" },
@@ -44,49 +61,49 @@ const options = {
   },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'];
-
-export const initialData = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [1,2,3,4,10,6],
-      //borderColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-      //backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: [1,2,3,4,5,6], 
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
-
 function ChartSection() {
+  const labels : string[] = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'];
+  const initialData  : IChartData = {
+    labels,
+    datasets: [
+
+    ],
+  };
+
 
   const [chartInput, setChartInput] = useState(initialData) 
-  const [selectedOptions, setSelectedOptions] = useState();
+  const [selectedOptions, setSelectedOptions] = useState<IOptionSelection[]>();
 
-  function handleSelect(input : any) { 
-    setSelectedOptions(input);
+  function handleSelect(input : MultiValue<IOptionSelection>) { 
+    console.log(input)
+    setSelectedOptions(input.map(i => i));
   }
 
   useEffect(() => {
-    setChartInput(initialData)
+
+    const o : ISeriesData[] | undefined = selectedOptions?.map((s, i) => (
+      {
+        label: 'Dataset ' + i,
+        data: [Math.random(), Math.random(), Math.random() , Math.random(), Math.random(), Math.random()],
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      }
+    ))
+
+    setChartInput({
+      labels: labels,
+      datasets: o
+    })
   }, [selectedOptions])
 
   return (
-    <div className="items-center m-4">
-      <h2>Choose the country: </h2>
+    <div className="items-center m-1 pt-4 flex-grow">
       <div className="dropdown-container">
         <Select
           options={optionList}
-          placeholder="Select color"
+          placeholder="Choose Countries You'd Like The Inflation For"
           value={selectedOptions}
+          id="select"
           onChange={handleSelect} 
           isSearchable={true} 
           isMulti />

@@ -4,7 +4,7 @@ import { ChartBarIcon } from "@heroicons/react/outline"
 
 function Header() {
   return (
-    <div className="flex items-center shadow-md justify-between">
+    <header className="flex items-center shadow-md justify-between sticky">
         {/* Left */}
         <div className="flex items-center">
           <ChartBarIcon className="h-4 ml-4"/>
@@ -23,7 +23,7 @@ function Header() {
           </Link>
         </div>
 
-    </div>
+    </header>
   )
 }
 
